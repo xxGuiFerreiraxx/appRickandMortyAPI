@@ -23,6 +23,9 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
     private EditText nm_personagem;
     private TextView id_personagem;
     private TextView name_personagem;
+    private TextView status_personagem;
+    private TextView species_personagem;
+    private TextView gender_personagem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,10 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
         nm_personagem = findViewById(R.id.nm_personagem);
         id_personagem = findViewById(R.id.id);
         name_personagem = findViewById(R.id.name);
+        status_personagem = findViewById(R.id.status);
+        species_personagem = findViewById(R.id.specie);
+        gender_personagem = findViewById(R.id.gender);
+
         if (getSupportLoaderManager().getLoader(0) != null) {
             getSupportLoaderManager().initLoader(0, null, this);
         }
@@ -66,6 +73,9 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
         else {
             if (queryString.length() == 0) {
                 name_personagem.setText(" ");
+                status_personagem.setText("");
+                species_personagem.setText("");
+                gender_personagem.setText("");
                 id_personagem.setText("Informe um termo de busca");
             } else {
                 name_personagem.setText(" ");
@@ -89,14 +99,17 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
             // Converte a resposta em Json
             JSONObject jsonObject = new JSONObject(data);
             // Obtem o JSONArray dos personagens
-            JSONArray itemsArray = jsonObject.getJSONArray("items");
+            JSONArray itemsArray = jsonObject.getJSONArray("results");
             // inicializa o contador
             int i = 0;
             String id = null;
             String name = null;
+            String status = null;
+            String species = null;
+            String gender = null;
             // Procura pro resultados nos itens do array
             while (i < itemsArray.length() &&
-                    (name == null && id == null)) {
+                    (name == null && id == null && status == null && species == null && gender == null)) {
                 // Obtem a informação
                 JSONObject character= itemsArray.getJSONObject(i);
                 //  Obter autor e titulo para o item,
@@ -104,6 +117,9 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
                 try {
                     id = character.getString("id");
                     name = character.getString("name");
+                    status = character.getString("status");
+                    species = character.getString("species");
+                    gender = character.getString("gender");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -114,7 +130,10 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
             if (id != null && name != null) {
                 id_personagem.setText(id);
                 name_personagem.setText(name);
-                //nmLivro.setText(R.string.str_empty);
+                status_personagem.setText(status);
+                species_personagem.setText(species);
+                gender_personagem.setText(gender);
+
             } else {
                 // If none are found, update the UI to show failed results.
                 id_personagem.setText("Sem resultados");
@@ -122,8 +141,8 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
             }
         } catch (Exception e) {
             // Se não receber um JSOn valido, informa ao usuário
-            id_personagem.setText("no_results");
-            name_personagem.setText("str_empty");
+            id_personagem.setText("id");
+            name_personagem.setText("name");
             e.printStackTrace();
         }
     }

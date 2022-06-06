@@ -1,7 +1,6 @@
 package com.example.rickandmorty;
 
 import android.content.Context;
-
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
@@ -19,6 +18,7 @@ public class CarregaPersonagem extends AsyncTaskLoader<String> {
     @Nullable
     @Override
     public String loadInBackground() {
+
         return Conexao.buscaInfosPersonagens(mQueryString);
     }
 }
