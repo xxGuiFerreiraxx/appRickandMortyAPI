@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">RickandMorty</string>
+    <string name="pergunta_main">Deseja entrar no multiverso do Rick and Morty?</string>
+    <string name="fala_main">Entra aí irmão, vai dentro</string>
+    <string name="txt_login">BEm-vindo ao multiverso de rick and morty, quem é vocÊ?</string>
+</resources>
