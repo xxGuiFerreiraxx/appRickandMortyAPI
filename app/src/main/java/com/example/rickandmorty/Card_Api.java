@@ -26,6 +26,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
     private TextView status_personagem;
     private TextView species_personagem;
     private TextView gender_personagem;
+    private TextView location_personagem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
         status_personagem = findViewById(R.id.status);
         species_personagem = findViewById(R.id.specie);
         gender_personagem = findViewById(R.id.gender);
+        location_personagem = findViewById(R.id.location);
 
         if (getSupportLoaderManager().getLoader(0) != null) {
             getSupportLoaderManager().initLoader(0, null, this);
@@ -76,6 +78,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
                 status_personagem.setText("");
                 species_personagem.setText("");
                 gender_personagem.setText("");
+                location_personagem.setText("");
                 id_personagem.setText("Informe um termo de busca");
             } else {
                 name_personagem.setText(" ");
@@ -100,6 +103,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
             JSONObject jsonObject = new JSONObject(data);
             // Obtem o JSONArray dos personagens
             JSONArray itemsArray = jsonObject.getJSONArray("results");
+
             // inicializa o contador
             int i = 0;
             String id = null;
@@ -107,11 +111,13 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
             String status = null;
             String species = null;
             String gender = null;
+            String name_location = null;
             // Procura pro resultados nos itens do array
             while (i < itemsArray.length() &&
-                    (name == null && id == null && status == null && species == null && gender == null)) {
+                    (name == null && id == null && status == null && species == null && gender == null && name_location == null)) {
                 // Obtem a informação
                 JSONObject character= itemsArray.getJSONObject(i);
+                JSONObject location= character.getJSONObject("location");
                 //  Obter autor e titulo para o item,
                 // erro se o campo estiver vazio
                 try {
@@ -120,6 +126,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
                     status = character.getString("status");
                     species = character.getString("species");
                     gender = character.getString("gender");
+                    name_location = location.getString("name");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -133,6 +140,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
                 status_personagem.setText(status);
                 species_personagem.setText(species);
                 gender_personagem.setText(gender);
+                location_personagem.setText(name_location);
 
             } else {
                 // If none are found, update the UI to show failed results.
