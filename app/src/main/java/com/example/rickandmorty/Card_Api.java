@@ -12,42 +12,63 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
     private EditText nm_personagem;
     private TextView id_personagem;
     private TextView name_personagem;
     private TextView status_personagem;
-    private TextView species_personagem;
-    private TextView gender_personagem;
-    private TextView location_personagem;
+    private String queryString;
+    private ListView listView;
+    private Button busca;
+    private List<Personagem> personagemList;
+
+    Personagem personagem = new Personagem();
+    BancoDeDados db=new BancoDeDados(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
         nm_personagem = findViewById(R.id.nm_personagem);
-        id_personagem = findViewById(R.id.id);
         name_personagem = findViewById(R.id.name);
         status_personagem = findViewById(R.id.status);
-        species_personagem = findViewById(R.id.specie);
-        gender_personagem = findViewById(R.id.gender);
-        location_personagem = findViewById(R.id.location);
+        listView = findViewById(R.id.listView);
+        busca = findViewById(R.id.button);
 
-        if (getSupportLoaderManager().getLoader(0) != null) {
-            getSupportLoaderManager().initLoader(0, null, this);
+        personagemList = new ArrayList<Personagem>();
+
+        //Verificar a disponibilidade  da rede//
+
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (connMgr != null) {
+            networkInfo = connMgr.getActiveNetworkInfo();
         }
+        if (networkInfo != null && networkInfo.isConnected()) {
+            Bundle queryBundle = new Bundle();
+            queryBundle.putString("queryString", queryString);
+            getSupportLoaderManager().restartLoader(0, queryBundle, this);
+        }
+
     }
 
     public void buscaPersonagens(View view) {
         // Recupera a string de busca.
-        String queryString = nm_personagem.getText().toString();
+        queryString = nm_personagem.getText().toString();
         // esconde o teclado qdo o botão é clicado
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -69,16 +90,13 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
             Bundle queryBundle = new Bundle();
             queryBundle.putString("queryString", queryString);
             getSupportLoaderManager().restartLoader(0, queryBundle, this);
-            name_personagem.setText(" ");
-            id_personagem.setText("Carregando");
+
         }
         else {
             if (queryString.length() == 0) {
                 name_personagem.setText(" ");
                 status_personagem.setText("");
-                species_personagem.setText("");
-                gender_personagem.setText("");
-                location_personagem.setText("");
+
                 id_personagem.setText("Informe um termo de busca");
             } else {
                 name_personagem.setText(" ");
@@ -98,63 +116,88 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
     }
     @Override
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
-        try {
-            // Converte a resposta em Json
-            JSONObject jsonObject = new JSONObject(data);
-            // Obtem o JSONArray dos personagens
-            JSONArray itemsArray = jsonObject.getJSONArray("results");
 
-            // inicializa o contador
-            int i = 0;
-            String id = null;
-            String name = null;
-            String status = null;
-            String species = null;
-            String gender = null;
-            String name_location = null;
-            // Procura pro resultados nos itens do array
-            while (i < itemsArray.length() &&
-                    (name == null && id == null && status == null && species == null && gender == null && name_location == null)) {
-                // Obtem a informação
-                JSONObject character= itemsArray.getJSONObject(i);
-                JSONObject location= character.getJSONObject("location");
-                //  Obter autor e titulo para o item,
-                // erro se o campo estiver vazio
-                try {
-                    id = character.getString("id");
-                    name = character.getString("name");
-                    status = character.getString("status");
-                    species = character.getString("species");
-                    gender = character.getString("gender");
-                    name_location = location.getString("name");
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        if (queryString == null) {
+            try {
+                // Converte a resposta em Json
+                JSONObject jsonObject = new JSONObject(data);
+                // Obtem o JSONArray dos personagens
+                JSONArray itemsArray = jsonObject.getJSONArray("results");
+
+                for (int i = 0; i < itemsArray.length(); i++) {
+                    JSONObject object = itemsArray.getJSONObject(i);
+                    Personagem personagem = new Personagem();
+                    personagem.setName(object.getString("name"));
+                    personagem.setStatus(object.getString("status"));
+
+                    personagemList.add(personagem);
                 }
-                // move para a proxima linha
-                i++;
-            }
-            //mostra o resultado qdo possivel.
-            if (id != null && name != null) {
-                id_personagem.setText(id);
-                name_personagem.setText(name);
-                status_personagem.setText(status);
-                species_personagem.setText(species);
-                gender_personagem.setText(gender);
-                location_personagem.setText(name_location);
 
-            } else {
-                // If none are found, update the UI to show failed results.
-                id_personagem.setText("Sem resultados");
-                name_personagem.setText(" ");
+                ListViewAdapter adapter = new ListViewAdapter(this, R.layout.itenlist, personagemList);
+                listView.setAdapter(adapter);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            // Se não receber um JSOn valido, informa ao usuário
-            id_personagem.setText("id");
-            name_personagem.setText("name");
-            e.printStackTrace();
+
+
+        }else {
+            try {
+                // Converte a resposta em Json
+                JSONObject jsonObject = new JSONObject(data);
+                // Obtem o JSONArray dos personagens
+                JSONArray itemsArray = jsonObject.getJSONArray("results");
+
+                // inicializa o contador
+                int i = 0;
+                String id = null;
+                String name = null;
+                String status = null;
+
+                // Procura pro resultados nos itens do array
+                while (i < itemsArray.length() &&
+                        (name == null && id == null && status == null )) {
+                    // Obtem a informação
+                    JSONObject character = itemsArray.getJSONObject(i);
+                    //  Obter autor e titulo para o item,
+                    // erro se o campo estiver vazio
+                    try {
+                        id = character.getString("id");
+                        name = character.getString("name");
+                        status = character.getString("status");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    // move para a proxima linha
+                    i++;
+                }
+                //mostra o resultado qdo possivel.
+
+                    personagemList.clear();
+                    for (int a = 0; a < itemsArray.length(); a++) {
+                        JSONObject object = itemsArray.getJSONObject(a);
+                        Personagem personagem = new Personagem();
+                        personagem.setName(object.getString("name"));
+                        personagem.setStatus(object.getString("status"));
+
+                        personagemList.add(personagem);
+
+                        ListViewAdapter adapter = new ListViewAdapter(this, R.layout.itenlist, personagemList);
+                        listView.setAdapter(adapter);
+                    }
+
+
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
-    }
-    @Override
+        }
+
+            @Override
     public void onLoaderReset(@NonNull Loader<String> loader) {
         // obrigatório implementar, nenhuma ação executada
     }

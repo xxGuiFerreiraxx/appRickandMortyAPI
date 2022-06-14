@@ -28,12 +28,19 @@ public class Conexao {
         String characterJSONString = null;
 
         try {
-            // Construção da URI de Busca
-            Uri builtURI = Uri.parse(PERSONAGENS_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, queryString)
-                    .appendQueryParameter(MAX_RESULTS, "10")
-                    .appendQueryParameter(TIPO_IMPRESSAO, "episode")
-                    .build();
+            Uri builtURI;
+            if(queryString == null){
+                builtURI = Uri.parse(PERSONAGENS_URL).buildUpon()
+                        .build();
+            }
+            else {
+                // Construção da URI de Busca
+                 builtURI = Uri.parse(PERSONAGENS_URL).buildUpon()
+                        .appendQueryParameter(QUERY_PARAM, queryString)
+                        .appendQueryParameter(MAX_RESULTS, "100")
+                        .appendQueryParameter(TIPO_IMPRESSAO, "episode")
+                        .build();
+            }
             // Converte a URI para a URL.
             URL requestURL = new URL(builtURI.toString());
             // Abre a conexão de rede
