@@ -28,14 +28,14 @@ public class Detalhes extends AppCompatActivity implements LoaderManager.LoaderC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhes);
 
-        Intent intent = getIntent();
-        int id = intent.getIntExtra("idPersonagem", 0);
+        Intent sla = getIntent();
+        String id = sla.getStringExtra("id");
         personagem = new Personagem();
 
         nome_do_personagem = findViewById(R.id.nome_personagem);
         status_do_personagem = findViewById(R.id.status_personagem);
 
-        queryString = "/" + String.valueOf(id);
+        queryString = "/" + (id);
 
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -65,18 +65,13 @@ public class Detalhes extends AppCompatActivity implements LoaderManager.LoaderC
     public void onLoadFinished(@NonNull Loader<String> loader, String data) {
         try {
             // Converte a resposta em Json
-            JSONObject jsonObject = new JSONObject(data);
+            JSONObject object = new JSONObject(data);
+            JSONObject object1 = object.getJSONObject("location");
             // Obtem o JSONArray dos personagens
-            JSONArray itemsArray = jsonObject.getJSONArray("results");
 
-            for (int i = 0; i < itemsArray.length(); i++) {
-                JSONObject object = itemsArray.getJSONObject(i);
-                Personagem personagem = new Personagem();
-                personagem.setName(object.getString("name"));
-                personagem.setStatus(object.getString("status"));
+            nome_do_personagem.setText(object.getString("name"));
+            status_do_personagem.setText(object.getString("status"));
 
-
-            }
 
 
         } catch (JSONException e) {

@@ -65,8 +65,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         holder.container_iten.setOnClickListener(v -> {
             Intent intent = new Intent(context, Detalhes.class);
-            //intent.putExtra("Element", (Parcelable) element);
-            intent.putExtra("idPersonagem", personagem.getId());
+            intent.putExtra("id", personagem.getId());
             context.startActivity(intent);
         });
 

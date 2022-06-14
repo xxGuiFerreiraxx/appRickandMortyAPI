@@ -68,7 +68,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
 
     public void buscaPersonagens(View view) {
         // Recupera a string de busca.
-        queryString = nm_personagem.getText().toString();
+        queryString = "/?name=" + nm_personagem.getText().toString();
         // esconde o teclado qdo o botão é clicado
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -129,6 +129,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
                     Personagem personagem = new Personagem();
                     personagem.setName(object.getString("name"));
                     personagem.setStatus(object.getString("status"));
+                    personagem.setId(object.getString("id"));
 
                     personagemList.add(personagem);
                 }
@@ -179,6 +180,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
                         Personagem personagem = new Personagem();
                         personagem.setName(object.getString("name"));
                         personagem.setStatus(object.getString("status"));
+                        personagem.setId(object.getString("id"));
 
                         personagemList.add(personagem);
 

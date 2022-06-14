@@ -9,6 +9,7 @@ public class CarregaPersonagem extends AsyncTaskLoader<String> {
     CarregaPersonagem(Context context, String queryString) {
         super(context);
         mQueryString = queryString;
+
     }
     @Override
     protected void onStartLoading() {

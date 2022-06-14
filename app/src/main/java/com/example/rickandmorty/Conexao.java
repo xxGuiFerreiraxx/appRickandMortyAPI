@@ -34,12 +34,12 @@ public class Conexao {
                         .build();
             }
             else {
-                // Construção da URI de Busca
-                 builtURI = Uri.parse(PERSONAGENS_URL).buildUpon()
-                        .appendQueryParameter(QUERY_PARAM, queryString)
-                        .appendQueryParameter(MAX_RESULTS, "100")
-                        .appendQueryParameter(TIPO_IMPRESSAO, "episode")
+                String url1 = PERSONAGENS_URL + queryString;
+                 //Construção da URI de Busca
+                builtURI = Uri.parse(url1).buildUpon()
                         .build();
+
+
             }
             // Converte a URI para a URL.
             URL requestURL = new URL(builtURI.toString());
