@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,11 +41,12 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
+        
         nm_personagem = findViewById(R.id.nm_personagem);
         name_personagem = findViewById(R.id.name);
         status_personagem = findViewById(R.id.status);
         listView = findViewById(R.id.listView);
-        busca = findViewById(R.id.button);
+        busca = findViewById(R.id.btnok);
 
         personagemList = new ArrayList<Personagem>();
 
@@ -69,6 +69,7 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
     public void buscaPersonagens(View view) {
         // Recupera a string de busca.
         queryString = "/?name=" + nm_personagem.getText().toString();
+
         // esconde o teclado qdo o botão é clicado
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -97,10 +98,10 @@ public class Card_Api extends AppCompatActivity implements LoaderManager.LoaderC
                 name_personagem.setText(" ");
                 status_personagem.setText("");
 
-                id_personagem.setText("Informe um termo de busca");
+                id_personagem.setText("@string/erro_notext");
             } else {
                 name_personagem.setText(" ");
-                id_personagem.setText("Verifique sua conexão");
+                id_personagem.setText("@string/erro_nointernet");
             }
         }
     }

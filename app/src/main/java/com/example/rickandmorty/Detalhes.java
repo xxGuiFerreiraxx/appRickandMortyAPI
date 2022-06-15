@@ -13,14 +13,13 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Detalhes extends AppCompatActivity implements LoaderManager.LoaderCallbacks<String> {
 
     String queryString;
-    TextView nome_do_personagem, status_do_personagem;
+    TextView nome_do_personagem, status_do_personagem, especie_personagem, genero_personagem, localizacao_personagem;
     Personagem personagem;
 
     @Override
@@ -32,8 +31,11 @@ public class Detalhes extends AppCompatActivity implements LoaderManager.LoaderC
         String id = sla.getStringExtra("id");
         personagem = new Personagem();
 
-        nome_do_personagem = findViewById(R.id.nome_personagem);
+        nome_do_personagem = findViewById(R.id.txt_nmpersonagem);
         status_do_personagem = findViewById(R.id.status_personagem);
+        especie_personagem = findViewById(R.id.especie_personagem);
+        genero_personagem = findViewById(R.id.genero_personagem);
+        localizacao_personagem= findViewById(R.id.localizacao_personagem);
 
         queryString = "/" + (id);
 
@@ -71,8 +73,9 @@ public class Detalhes extends AppCompatActivity implements LoaderManager.LoaderC
 
             nome_do_personagem.setText(object.getString("name"));
             status_do_personagem.setText(object.getString("status"));
-
-
+            especie_personagem .setText(object.getString("species"));
+            genero_personagem.setText(object.getString("gender"));
+            localizacao_personagem.setText(object1.getString("name"));
 
         } catch (JSONException e) {
             e.printStackTrace();

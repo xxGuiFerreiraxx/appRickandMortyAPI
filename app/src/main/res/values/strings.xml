@@ -1,6 +1,33 @@
 <resources>
+
+    //Strings main
     <string name="app_name">RickandMorty</string>
     <string name="pergunta_main">Deseja entrar no multiverso do Rick and Morty?</string>
     <string name="fala_main">Entra aí irmão, vai dentro</string>
-    <string name="txt_login">BEm-vindo ao multiverso de rick and morty, quem é vocÊ?</string>
+    <string name="txt_login">Bem-vindo ao multiverso de rick and morty, quem é você?</string>
+    <string name="erro_notext">Informe um termo de busca</string>
+    <string name="erro_nointernet">Verifique sua conexão</string>
+
+    //Strings de descrição
+    <string name="desc_imgrick">Imagem do Rick</string>
+    <string name="desc_imgportal">Imagem do portal</string>
+    <string name="desc_imgrickemorty">Imagem do Rick e Morty</string>
+    <string name="desc_imgpersonagemdet">Imagem do Personagem</string>
+
+
+
+    //Strings de palavras unicas
+    <string name="txtnome">Nome</string>
+    <string name="txtemail">Email</string>
+    <string name="txtsenha">Senha</string>
+    <string name="txtcontinuar">Continuar</string>
+    <string name="txtok">ok</string>
+    <string name="txtnmpersonagem">Nome do personagem</string>
+    <string name="txt_status1">status:</string>
+    <string name="txt_especie1">espécie:</string>
+    <string name="txt_genero1">gênero:</string>
+    <string name="txt_loc1">localização:</string>
+
+
+
 </resources>
