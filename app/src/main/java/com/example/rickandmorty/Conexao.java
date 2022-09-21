@@ -1,7 +1,10 @@
 package com.example.rickandmorty;
 
 import android.net.Uri;
+import android.util.JsonReader;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,5 +86,219 @@ public class Conexao {
         Log.d(LOG_TAG, characterJSONString);
         return characterJSONString;
     }
+
+    static void adicionaPersonagem(Character character){
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        String characterJSONString = null;
+
+
+
+        try {
+            Uri builtURI;
+            if(character == null){
+                builtURI = Uri.parse(PERSONAGENS_URL).buildUpon()
+                        .build();
+            }
+            else {
+                String url1 = PERSONAGENS_URL;
+                //Construção da URI de Busca
+                builtURI = Uri.parse(url1).buildUpon()
+                        .build();
+
+
+            }
+
+            // Busca o InputStream.
+            InputStream inputStream = urlConnection.getInputStream();
+            // Cria o buffer para o input stream
+            InputStreamReader inputStreamReader =
+                    new InputStreamReader(inputStream, "UTF-8");
+
+            JsonReader jsonReader = new JsonReader(inputStreamReader);
+            jsonReader.beginObject(); // Start processing the JSON object
+            while (jsonReader.hasNext()) { // Loop through all keys
+                String url = jsonReader.nextName(); // Fetch the next key
+                if (url.equals("URL DA API")) { // Check if desired key
+                    Gson gson = new Gson();
+                    String characterAdd = gson.toJson(character);
+                    // Fetch the value as a String
+                    characterAdd = jsonReader.nextString();
+
+                    // Do something with the value
+                    // ...
+
+                    break; // Break out of the loop
+                } else {
+                    jsonReader.skipValue(); // Skip values of other keys
+                }
+            }
+            // Converte a URI para a URL.
+            URL requestURL = new URL(builtURI.toString());
+            // Abre a conexão de rede
+            urlConnection = (HttpURLConnection) requestURL.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.connect();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // fecha a conexão e o buffer.
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    static void updatePersonagem(Character character){
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        String characterJSONString = null;
+
+
+
+        try {
+            Uri builtURI;
+            if(character == null){
+                builtURI = Uri.parse(PERSONAGENS_URL).buildUpon()
+                        .build();
+            }
+            else {
+                String url1 = PERSONAGENS_URL;
+                //Construção da URI de Busca
+                builtURI = Uri.parse(url1).buildUpon()
+                        .build();
+
+
+            }
+
+            // Busca o InputStream.
+            InputStream inputStream = urlConnection.getInputStream();
+            // Cria o buffer para o input stream
+            InputStreamReader inputStreamReader =
+                    new InputStreamReader(inputStream, "UTF-8");
+
+            JsonReader jsonReader = new JsonReader(inputStreamReader);
+            jsonReader.beginObject(); // Start processing the JSON object
+            while (jsonReader.hasNext()) { // Loop through all keys
+                String url = jsonReader.nextName(); // Fetch the next key
+                if (url.equals("URL DA API")) { // Check if desired key
+                    Gson gson = new Gson();
+                    String characterUpdate = gson.toJson(character);
+                    // Fetch the value as a String
+                    characterUpdate = jsonReader.nextString();
+
+                    // Do something with the value
+                    // ...
+
+                    break; // Break out of the loop
+                } else {
+                    jsonReader.skipValue(); // Skip values of other keys
+                }
+            }
+            // Converte a URI para a URL.
+            URL requestURL = new URL(builtURI.toString());
+            // Abre a conexão de rede
+            urlConnection = (HttpURLConnection) requestURL.openConnection();
+            urlConnection.setRequestMethod("SET");
+            urlConnection.connect();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // fecha a conexão e o buffer.
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    static void deletePersonagem(String character){
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+        String characterJSONString = null;
+
+
+
+        try {
+            Uri builtURI;
+            if(character == null){
+                builtURI = Uri.parse(PERSONAGENS_URL).buildUpon()
+                        .build();
+            }
+            else {
+                String url1 = PERSONAGENS_URL;
+                //Construção da URI de Busca
+                builtURI = Uri.parse(url1).buildUpon()
+                        .build();
+
+
+            }
+
+            // Busca o InputStream.
+            InputStream inputStream = urlConnection.getInputStream();
+            // Cria o buffer para o input stream
+            InputStreamReader inputStreamReader =
+                    new InputStreamReader(inputStream, "UTF-8");
+
+            JsonReader jsonReader = new JsonReader(inputStreamReader);
+            jsonReader.beginObject(); // Start processing the JSON object
+            while (jsonReader.hasNext()) { // Loop through all keys
+                String url = jsonReader.nextName(); // Fetch the next key
+                if (url.equals("URL DA API")) { // Check if desired key
+                    Gson gson = new Gson();
+                    String characterUpdate = gson.toJson(character);
+                    // Fetch the value as a String
+                    characterUpdate = jsonReader.nextString();
+
+                    // Do something with the value
+                    // ...
+
+                    break; // Break out of the loop
+                } else {
+                    jsonReader.skipValue(); // Skip values of other keys
+                }
+            }
+            // Converte a URI para a URL.
+            URL requestURL = new URL(builtURI.toString());
+            // Abre a conexão de rede
+            urlConnection = (HttpURLConnection) requestURL.openConnection();
+            urlConnection.setRequestMethod("DELETE");
+            urlConnection.connect();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // fecha a conexão e o buffer.
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
+
 
